@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=0.5, target-densitydpi=device-dpi" />
+<meta name="format-detection" content="telephone=no" />
+<title>e전단</title>
+<style>
+* { margin: 0; padding: 0; touch-action:none; }
+a { text-decoration: none; outline: none; }
+a:hover, a:active { text-decoration: none; }
+html, body { position: relative; height: 100%; }
+.swiper-container { width: 100%; height: 100%; }
+.swiper-slide { overflow: hidden; }
+.headNav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 120px;
+	z-index: 10;
+}
+.headNavWrap {
+	padding: 20px 0 0 30px;
+	width: 100%;
+	height: 120px;
+	box-sizing: border-box;
+	background: rgba(0,0,0,0.6);
+}
+.btnCloseLeaflet {
+	position: fixed;
+	top: 35px;
+	right: 30px;
+	width: 50px;
+	height: 50px;
+	background: url(/images/leaflet/btnCloseLeaflet.png) no-repeat;
+	text-indent: -9999%;
+}
+.storeName {
+	display: inline-block;
+	font-size: 38px;
+	color: #fdc145;
+}
+.btnQuickStore {
+	display: inline-block;
+	margin-left: 20px;
+	padding: 2px 12px;
+	font-size: 28px;
+	font-weight: bold;
+	color: #4d5059;
+	border-radius: 18px;
+	background: #fdc145;
+}
+.leafletDate { font-size: 26px; color: #fdc145; }
+.zoomBtnWrap {
+	position: absolute;
+	bottom: 140px;
+	right: 0;
+	z-index: 10;
+	width: 100px;
+	text-indent: -9999%;
+}
+.zoomBtnWrap a {
+	display: block;
+	width: 100px;
+	height: 100px;
+}
+.btnZoomIn {
+	background: url(/images/leaflet/btnZoomIn_on.png) no-repeat;
+	background-size: 62px 62px;
+	background-position: center bottom;
+}
+.btnZoomOut {
+	margin-top: 20px;
+	background: url(/images/leaflet/btnZoomOut_on.png) no-repeat;
+	background-size: 62px 62px;
+	background-position: center top;
+}
+.footPageInfo {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100px;
+	background: rgba(0,0,0,0.6);
+	z-index: 10;
+}
+.btnPrev {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	width: 100px;
+	height: 100px;
+	background: url(/images/leaflet/arrowLeft.png) no-repeat center center;
+	background-size: 24px 44px;
+}
+.btnNext {
+	position: absolute;
+	right: 0;
+	top: 0;
+	display: block;
+	width: 100px;
+	height: 100px;
+	background: url(/images/leaflet/arrowRight.png) no-repeat center center;
+	background-size: 24px 44px;
+}
+.pageInfoWrap {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: -135px;
+}
+.activeIndex {
+	margin-top: 25px;
+	width: 75px;
+	height: 50px;
+	font-size: 34px;
+	text-align: center;
+}
+.totalIndex {
+	margin-top: 25px;
+	margin-left: 20px;
+	font-size: 34px;
+	color: white;
+}
+.moveInputIndex {
+	display: inline-block;
+	width: 150px;
+	height: 48px;
+	padding: 22px 0;
+}
+.moveInputUi {
+	display: inline-block;
+	padding: 4px 8px;
+	width: 76px;
+	height: 48px;
+	line-height: 48px;
+	text-align: center;
+	margin-left: 30px;
+	font-size: 30px;
+	font-weight: bold;
+	color: #4d5059;
+	background: #fdc145;
+	border-radius: 12px;
+}
+.swiper-pagination {
+	position: fixed;
+	top: -9999%;
+	width: 1px;
+	height: 1px;
+}
+
+/*====== [s] e전단 plugin 효과 ==========*/
+/*** html, body에 height를 다 줘야 함 */
+html, body {
+	height:100%;
+}
+
+.image-viewer {
+	width: 100%;
+    height: 100%;
+}
+
+.myElement-wrapper { 
+    width: 100%;
+    height: 100%;
+    overflow: hidden; 
+}
+
+.myElement {
+  overflow: hidden;
+  position: relative; 
+  top: 0px;
+  left: 0px;
+  height: 100%; 
+  background-color: #ccc;    
+  /* border: 1px solid red; */  
+}
+.myElement img {
+	width: 100%;
+	height: 100%;
+	vertical-align: middle;
+	-webkit-appearance: none;
+}
+.back {
+	position: fixed;
+	z-index: 999999;
+	height:50px;
+	line-height:50px;
+	font-size:50px;
+}
+.none {
+	display:none !important;
+}
+/*====== [e] e전단 plugin 효과 ==========*/
+</style>
+
+
+</head>
+
+<body>
+	<div class="back">
+		<a href="javascript:window.history.back();">back</a>
+		<a href="javascript:window.location.reload();">refresh</a>
+		<span class="vlog"></span>
+		<span class="clog"></span>
+	</div>
+	
+	<!-- loading -->
+	<img id="screen_preloader" class="evdLoader" src="/images/common/preloader.gif" width="35" height="35" alt="프리로더" style="z-index:9999999; position:fixed;left:50%;top:50%;display:none;" />
+	
+
+	<div class="image-viewer el-view" > 
+		
+		<!-- [s] e전단 plugin  -->
+		<div id="" class="myElement-wrapper el-view-content"> 
+			<div class="myElement el-content"  data-width="" data-height="" > 
+				<img data-src="./images/sample-image-a-h1-t.jpg" class="none"  />
+					<div style="width:0;height:0;position:absolute;top:-10000px; left:-10000px;" >test</div> <!-- 대체 텍스트  -->
+				<img data-src="./images/sample-image-a-w1-t.jpg" class="none"  />
+					<div style="width:0;height:0;position:absolute;top:-10000px; left:-10000px;" >test</div> <!-- 대체 텍스트  -->
+			</div>
+		</div>
+		<!-- [e] e전단 plugin  -->
+		
+		<div class="headNav el-view-control">
+			<!-- [개발요청] 닫기 버튼 -->
+			<a class="btnCloseLeaflet" href="javascript:void(0);">닫기</a>
+			<div class="headNavWrap">
+				<div class="quickStore">
+					<!-- [개발요청] 단골점포 -->
+					<p class="storeName">
+						<!-- <strong>서판교</strong>점 -->
+						<strong>하안동점</strong>
+					</p>
+					<!-- [개발요청] 단골점포변경 버튼 -->
+					<a class="btnQuickStore" href="javascript:void(0);">단골점포변경</a>
+				</div>
+				<!-- [개발요청] 전단지 기간 -->
+				<p class="leafletDate">2019.03.14~03.20</p>
+			</div>
+			<!-- .headNavWrap -->
+		</div>
+		<!-- // .headNav -->
+		<div class="zoomBtnWrap el-view-control">
+			<!-- zoom in,out 버튼 -->
+			<a class="btnZoomIn el-plus" href="javascript:void(0);">btnZoomIn</a>
+			<a class="btnZoomOut el-minus" href="javascript:void(0);">btnZoomOut</a>
+		</div>
+		
+		<div class="footPageInfo el-view-control">
+			<!-- 슬라이드 다음, 이전 버튼 -->
+			<a class="btnNext el-next"></a>
+			<a class="btnPrev el-prev"></a>
+			<div class="pageInfoWrap">
+				<!-- 사용자가 index 값을 입력해서 이동 -->
+				<input type="text" class="activeIndex el-current-page" value="1" />
+				<!-- 클래스 : slideLength 슬라이드 총 갯수 값 -->
+				<span class="totalIndex "> &#47; <span class="slideLength el-total-page">1</span></span>
+				<!-- input 에 입력한 index 값으로 이동 버튼 -->
+				<a class="moveInputIndex el-move-page" href="javascript:void(0);">
+					<span class="moveInputUi" >이동</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	
+<!-- scripts -->
+<script type="text/javascript" src="./res2/jquery-1.11.2.js"></script>
+<script type="text/javascript" src="./res2/jquery-ui-easing.min.js"></script>  
+<!-- hammer 2 -->
+<script src="./res2/hammer.v2.0.8.min.js"></script>
+<script src="./res2/evd_e_leaflet.v2.0.js"></script>
+
+<script>
+	console.log('>> v4');   
+	var evd_el = new EVD_E_Leaflet_View({TEST_MODE: false}); 
+	
+</script>
+</body>
+
+</html>
